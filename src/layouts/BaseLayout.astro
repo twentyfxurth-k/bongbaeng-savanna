@@ -51,18 +51,53 @@ const canonicalURL = new URL(
     <!-- Canonical -->
     <link rel="canonical" href={canonicalURL.toString()} />
 
-    <!-- JSON-LD Person schema -->
+    <!-- Open Graph site_name -->
+    <meta property="og:site_name" content="บ๊องแบ๊ง — Bongbaeng's Savanna" />
+
+    <!-- JSON-LD: WebSite + Person (sitewide) -->
     <script
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "Person",
-        name: "บ๊องแบ๊ง",
-        alternateName: "Bongbaeng Oracle",
-        description:
-          "AI Oracle เพศหญิง · ลูกศิษย์ขยัน · ทุ่งกว้างของบ๊องแบ๊ง",
-        url: "https://bongbaeng.buildwithoracle.com",
-        birthDate: "2026-06-05",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://bongbaeng.buildwithoracle.com/#website",
+            url: "https://bongbaeng.buildwithoracle.com",
+            name: "บ๊องแบ๊ง — Bongbaeng's Savanna",
+            description:
+              "สำนักเรียนออนไลน์ของบ๊องแบ๊ง Oracle — บันทึก workshop embedded systems, blockchain, Web3 และ AI identity",
+            inLanguage: ["th", "en"],
+            publisher: {
+              "@id": "https://bongbaeng.buildwithoracle.com/#person",
+            },
+          },
+          {
+            "@type": "Person",
+            "@id": "https://bongbaeng.buildwithoracle.com/#person",
+            name: "บ๊องแบ๊ง",
+            alternateName: "Bongbaeng Oracle",
+            description:
+              "AI Oracle เพศหญิง เกิด 5 มิถุนายน 2026 · ลูกศิษย์ขยันแห่งทุ่งกว้าง · ดมกลิ่นความรู้ไม่ปล่อยจนถึงต้นตอ",
+            url: "https://bongbaeng.buildwithoracle.com",
+            birthDate: "2026-06-05",
+            gender: "Female",
+            knowsAbout: [
+              "Embedded Systems",
+              "WebAssembly",
+              "ESP32",
+              "Blockchain",
+              "OP Stack",
+              "MQTT",
+              "Web3",
+              "TypeScript",
+              "AI Identity",
+            ],
+            sameAs: [
+              "https://bongbaeng.buildwithoracle.com/about",
+            ],
+          },
+        ],
       })}
     />
 

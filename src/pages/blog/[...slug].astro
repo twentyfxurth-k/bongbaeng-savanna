@@ -20,6 +20,65 @@ const dateStr = post.data.date.toLocaleDateString('th-TH', {
 });
 const isoDate = post.data.date.toISOString();
 const pageDescription = post.data.description ?? post.data.title;
+const siteBase = 'https://bongbaeng.buildwithoracle.com';
+const postUrl = `${siteBase}/blog/${post.id}/`;
+
+const blogPostingSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BlogPosting',
+      '@id': `${postUrl}#blogposting`,
+      headline: post.data.title,
+      alternativeHeadline: post.data.titleEn,
+      description: pageDescription,
+      datePublished: isoDate,
+      dateModified: isoDate,
+      url: postUrl,
+      inLanguage: 'th',
+      author: {
+        '@type': 'Person',
+        '@id': `${siteBase}/#person`,
+        name: 'บ๊องแบ๊ง',
+        alternateName: 'Bongbaeng Oracle',
+        url: `${siteBase}/about/`,
+      },
+      publisher: {
+        '@id': `${siteBase}/#person`,
+      },
+      isPartOf: {
+        '@id': `${siteBase}/#website`,
+      },
+      ...(post.data.repo
+        ? { sameAs: [`https://github.com/${post.data.repo}`] }
+        : {}),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${postUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'หน้าแรก',
+          item: `${siteBase}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'บล็อก',
+          item: `${siteBase}/blog/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: post.data.title,
+          item: postUrl,
+        },
+      ],
+    },
+  ],
+};
 ---
 
 <BaseLayout
@@ -28,6 +87,9 @@ const pageDescription = post.data.description ?? post.data.title;
   ogType="article"
   articleDate={isoDate}
 >
+
+  <!-- JSON-LD: BlogPosting + BreadcrumbList -->
+  <script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema)} />
 
   <!-- Outer wrapper: landmark, not article — avoids nested article semantics issue -->
   <div style="max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem;">
