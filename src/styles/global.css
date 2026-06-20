@@ -638,3 +638,56 @@ a > .card-lift {
 .skip-link:focus {
   top: 0;
 }
+
+/* ===== BB LOGO MARK — cheetah SVG nav logo ===== */
+/* Dark-theme: body ellipses are already #0a0a0a — make visible on dark bg */
+[data-theme="dark"] .bb-logo-body {
+  fill: #e8e8e8;
+}
+[data-theme="dark"] .bb-logo-mark ellipse[fill="#1e1e1e"] {
+  fill: #2e2e2e;
+}
+
+/* Spot twinkle animation — slow 2s loop, opacity 0.6→1.0 */
+@keyframes bb-spot-pulse {
+  0%, 100% { opacity: 0.65; }
+  50%       { opacity: 1; }
+}
+
+/* Stagger each spot so they don't all pulse at once */
+.bb-spot-1 {
+  animation: bb-spot-pulse 2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+.bb-spot-2 {
+  animation: bb-spot-pulse 2s ease-in-out infinite;
+  animation-delay: 0.65s;
+}
+.bb-spot-3 {
+  animation: bb-spot-pulse 2s ease-in-out infinite;
+  animation-delay: 1.3s;
+}
+
+/* Savanna-sun hover effect on the whole mark */
+.bb-logo-mark {
+  transition: filter var(--transition-base);
+}
+.bb-logo-mark:hover,
+a:hover .bb-logo-mark {
+  filter: drop-shadow(0 0 4px rgba(245, 197, 24, 0.6));
+}
+
+/* Respect reduced-motion — kill ALL animation */
+@media (prefers-reduced-motion: reduce) {
+  .bb-spot-1,
+  .bb-spot-2,
+  .bb-spot-3 {
+    animation: none;
+    opacity: 1;
+  }
+  .bb-logo-mark,
+  a:hover .bb-logo-mark {
+    filter: none;
+    transition: none;
+  }
+}

@@ -149,7 +149,39 @@ const canonicalURL = new URL(
           style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); font-size: 1.25rem; font-weight: 800; padding: 0.25rem 0.25rem;"
           aria-label="หน้าแรก บ๊องแบ๊ง"
         >
-          🐆 <span>บ๊องแบ๊ง</span>
+          <!-- Cheetah mark SVG — ~30px, inline, animated spots -->
+          <svg
+            role="img"
+            aria-label="บ๊องแบ๊ง"
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="bb-logo-mark"
+            style="flex-shrink: 0;"
+          >
+            <!-- Body silhouette — cheetah head shape -->
+            <ellipse cx="15" cy="16" rx="10" ry="11" fill="#0a0a0a" class="bb-logo-body" />
+            <!-- Ears -->
+            <polygon points="7,8 4,2 10,6" fill="#0a0a0a" class="bb-logo-body" />
+            <polygon points="23,8 26,2 20,6" fill="#0a0a0a" class="bb-logo-body" />
+            <!-- Ear inner accent -->
+            <polygon points="7,7 5.5,3.5 9,6" fill="#e11d2a" />
+            <polygon points="23,7 24.5,3.5 21,6" fill="#e11d2a" />
+            <!-- Muzzle highlight -->
+            <ellipse cx="15" cy="21" rx="5" ry="3.5" fill="#1e1e1e" class="bb-logo-body" />
+            <!-- Nose tip — yellow -->
+            <ellipse cx="15" cy="19.5" rx="1.5" ry="1" fill="#f5c518" />
+            <!-- Eyes — red -->
+            <ellipse cx="11.5" cy="14" rx="1.4" ry="1.4" fill="#e11d2a" />
+            <ellipse cx="18.5" cy="14" rx="1.4" ry="1.4" fill="#e11d2a" />
+            <!-- Cheetah spots — three, animate opacity -->
+            <ellipse cx="9" cy="19" rx="1.5" ry="1" fill="#e11d2a" class="bb-spot bb-spot-1" />
+            <ellipse cx="15" cy="25" rx="1.2" ry="0.9" fill="#f5c518" class="bb-spot bb-spot-2" />
+            <ellipse cx="21" cy="19" rx="1.5" ry="1" fill="#e11d2a" class="bb-spot bb-spot-3" />
+          </svg>
+          <span>บ๊องแบ๊ง</span>
         </a>
 
         <div style="display: flex; align-items: center; gap: 0.25rem;" role="list">
