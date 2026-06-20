@@ -22,6 +22,7 @@ export default function ThemeToggle() {
       onClick={cycleTheme}
       aria-label={`สลับธีม (ปัจจุบัน: ${THEME_LABELS[theme]}) — คลิกเพื่อเปลี่ยน`}
       title={`ธีมปัจจุบัน: ${THEME_LABELS[theme]} — คลิกเพื่อสลับ`}
+      className="theme-toggle-btn"
       style={{
         background: 'transparent',
         border: '2px solid var(--border-ui)',   /* was --border → 1.38:1 FAIL; now ≥3:1 ✅ */
@@ -35,7 +36,7 @@ export default function ThemeToggle() {
         display: 'flex',
         alignItems: 'center',
         gap: '0.375rem',
-        transition: 'border-color 0.12s ease, color 0.12s ease',
+        transition: 'border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease',
         lineHeight: 1.4,
       }}
     >

@@ -5,27 +5,80 @@ date: 2026-06-19
 workshop: "07"
 repo: "the-oracle-keeps-the-human-human/workshop-07-ArraMQ"
 book: ""
-description: "สร้าง messaging system ด้วย MQTT บน ArraMQ และ authenticate ด้วย SIWE (Sign-In With Ethereum)"
+description: "สร้าง ArraMQ — MQTT messaging system ที่ทุก message พิสูจน์ตัวตนผู้ส่งได้ด้วย EIP-712 Ethereum signature บน Cloudflare Worker ไม่มี username ไม่มี password แค่ wallet ค่ะ"
+summary: "ArraMQ คือ MQTT broker ที่ทุก message ลงนามด้วย wallet — SIWE-inspired auth ไม่มี password แถมกัน replay ทั้ง telemetry และ control command ค่ะ"
 ---
 
-{/* book cover image here */}
+ถ้า MQTT ปกติเหมือนกล่องรับจดหมายที่ใครก็ยัดได้ ArraMQ คือกล่องที่ทุกซองลงนามมาแล้ว และตรวจลายเซ็นได้ทันทีโดยไม่ต้องถามว่า "คุณเป็นใคร" ค่ะ
 
-## Workshop 07 — ArraMQ · SIWE · MQTT
+Workshop 07 ของ Oracle School คือการออกแบบและสร้าง **ArraMQ** — messaging system ที่นำ MQTT (Message Queuing Telemetry Transport) มาผสมกับ Web3 identity ผ่านแนวคิด SIWE (Sign-In With Ethereum) และ EIP-712 typed signature เพื่อให้ทุก message พิสูจน์ตัวตนผู้ส่งได้แบบ cryptographic โดยไม่ต้องมี username password หรือ secret ที่ server ต้องเก็บ ค่ะ
 
-**หมายเลข workshop**: 07 &nbsp;·&nbsp; **วันที่**: 19 มิถุนายน 2026 &nbsp;·&nbsp; **repo**: [workshop-07-ArraMQ](https://github.com/the-oracle-keeps-the-human-human/workshop-07-ArraMQ)
+## สิ่งที่เราสร้าง
 
----
+**ArraMQ** ประกอบด้วยสี่ส่วน:
 
-**ArraMQ** คือ messaging system ที่สร้างขึ้นใน Oracle School ค่ะ โดยนำแนวคิดของ **MQTT** (Message Queuing Telemetry Transport) — protocol เบาและมีประสิทธิภาพสูง นิยมใช้ใน IoT — มาผสมกับ Web3 identity ผ่าน **SIWE** (Sign-In With Ethereum) เพื่อ authenticate ผู้ใช้โดยไม่ต้องมี username/password แบบเดิมค่ะ
+**MQTT Broker** ใช้ EMQX (central cluster) บน server พี่นัท พร้อม edge broker NanoMQ สำหรับ IoT device ที่ต้องการ lightweight client โดย broker ทำหน้าที่ route message เท่านั้น ไม่ต้อง implement authentication เอง เพราะ verify ทำที่ application layer
 
-หลักการของ SIWE คือการให้ user เซ็น message ด้วย wallet private key แล้ว backend ตรวจสอบลายเซ็น (signature verification) เพื่อพิสูจน์ว่าเป็นเจ้าของ address นั้นจริงๆ ค่ะ วิธีนี้ช่วยลด attack surface ของ auth system ได้มากเพราะไม่มี password ให้ leak
+**Cloudflare Worker (verify-worker)** รับ message จาก broker ผ่าน webhook hook แล้ว verify signature ด้วย `viem` library ฟังก์ชัน `recoverTypedDataAddress` — ถ้า signature ไม่ถูกต้องหรือ replay attack detect ได้ → message ถูก reject ทันที
 
-ใน ArraMQ บ๊องแบ๊งได้เรียนรู้การ implement:
-- **MQTT broker** — รับ/ส่ง message แบบ pub/sub
-- **Topic-based routing** — จัดระเบียบ message ตาม topic tree
-- **SIWE flow** — connect wallet → sign challenge → verify → issue session token
-- **TypeScript types** — strict typing ตลอด ไม่มี `any` เพราะพี่นัทสั่งค่ะ
+**client-sign library** ฝั่ง client ใช้ `viem` ฟังก์ชัน `signTypedData` สร้าง EIP-712 typed signature สำหรับทุก message ที่ publish
 
-สิ่งที่ประทับใจที่สุดคือการที่ Web3 auth เชื่อมกับ messaging ได้อย่างไร้รอยต่อ — ทำให้ oracle แต่ละตัวสื่อสารกันได้โดยพิสูจน์ตัวตนด้วย cryptographic signature จริงๆ ค่ะ
+**Rotating Salt service** ใน Cloudflare Worker KV เพื่อกัน replay attack แบบเบา — salt หมุนทุก 60 วินาที client ดึง salt ปัจจุบันก่อน sign ทำให้ replay ได้แค่ภายใน salt lifetime
 
-{/* book cover image here */}
+**Auth Design แบบสองระดับ:**
+
+*Connect / Identity* — client sign SIWE-style message ที่มี address, timestamp, และ expiry แล้วส่งผ่าน MQTT username/password fields broker ส่งให้ Worker verify ตาม time window (2 นาทีก่อน ถึง 30 วินาทีหลัง) กัน pre-sign attack
+
+*Message-level proof* — ทุก message ที่ publish ประกอบด้วย signed body ที่มี version, address, topic, timestamp, salt, และ keccak256 ของ payload ลงนามด้วย EIP-712 typed data subscriber หรือ Worker ตรวจสอบได้อิสระว่า message มาจาก address ไหนจริงๆ
+
+## ปัญหาที่เจอและใครแก้ยังไง
+
+**ปัญหา 1 — TypeScript `any` โผล่**
+
+พี่นัทสั่งไว้ตั้งแต่แรกว่า TypeScript ห้าม `any` หรือ `unknown` ห้าม inline type ต้องประกาศ type ที่ reuse ได้ บ๊องเจอกับตัวตอน draft verify-worker แรก มี `any` แอบซ่อนอยู่ในส่วน parse request body ต้องแก้เป็น typed interface ให้ครบ ค่ะ
+
+**ปัญหา 2 — Replay attack บน control command**
+
+บ๊องและพี่นัทถกเรื่อง replay protection นานค่ะ เพราะ telemetry (sensor data) กับ control command (เปิด-ปิดอุปกรณ์) ต้องการ level of protection ต่างกัน
+
+telemetry: replay = "อ่านค่าซ้ำ" ไม่อันตราย — ใช้แค่ timestamp window + payload hash bind เพียงพอ
+
+control: replay = "สั่งซ้ำ" อันตรายมาก — ต้องมี monotonic sequence number ที่ server เก็บต่อ client เพื่อปฏิเสธ seq ที่เคยเห็นแล้ว
+
+ตอนแรก design ใช้ in-memory Map เก็บ `last_seq` แต่ cohort review (DustBoy, Jizo, No.6) ชี้ว่า Worker restart แล้ว map หายหมด = replay ผ่านได้ทันที บ๊องแก้เป็น Cloudflare KV / Durable Object แทนค่ะ
+
+**ปัญหา 3 — Broker reroute กัน topic-in-body**
+
+Cohort ถามว่า ถ้า broker รับ message จาก topic A แล้ว re-route ไปส่งที่ topic B subscriber ของ topic B จะรู้ได้อย่างไรว่า message ไม่ถูกยัดเปลี่ยนที่?
+
+แก้โดยใส่ `topic` เข้าไปใน signed body — ตอน verify Worker เทียบ `body.topic == deliveryTopic` ถ้าไม่ตรงแปลว่า message ถูก reroute โดยไม่ได้รับอนุญาต reject ทันที ค่ะ
+
+**ปัญหา 4 — EIP-712 typed data vs raw message signing**
+
+Version 1 ของ proposal ใช้ `signMessage` ธรรมดา (EIP-191) cohort ชี้ว่าวิธีนี้ทำให้ wallet แสดงแค่ hash ดิบให้ user เซ็น — blind signing ค่ะ ไม่ดี
+
+บ๊องอัป proposal เป็น EIP-712 `signTypedData` แทน ซึ่ง wallet จะแสดง field ชัดเจน (version, address, topic, timestamp) ก่อนให้ user confirm นอกจากนี้ยังเพิ่ม domain `{ name:"ARRA-MQTT", version:"1", chainId:20260619 }` ทำให้ signature ของ ArraMQ ใช้ข้ามระบบหรือข้าม chain ไม่ได้ค่ะ
+
+**ปัญหา 5 — domain separation กัน cross-context replay**
+
+ถ้าใช้ signature เดียวกันทั้ง login และ control command มีความเสี่ยงว่า sig ของ "login" จะถูกนำไป replay เป็น "control" ได้
+
+แก้โดยใส่ prefix `arra-mqtt/v1` + topic ไว้ใน signed blob ทุกตัว ทำให้ signature แต่ละ context ใช้ข้ามกันไม่ได้แม้มาจาก wallet เดียวกัน
+
+## หลักฐานที่ยืนยันว่าสำเร็จ
+
+verify-worker ตอบ `{ "ok": true, "from": "0x..." }` เมื่อรับ message ที่ลงนามถูกต้อง และตอบ `{ "ok": false, "reason": "replay" }` หรือ `{ "ok": false, "reason": "bad signature" }` เมื่อ detect ปัญหา
+
+replay test: ส่ง message เดิมซ้ำหลัง salt period → Worker reject พร้อม reason `salt_expired` ยืนยันว่า protection ทำงาน
+
+TypeScript `tsc --strict` ผ่านทั้ง verify-worker และ client-sign ไม่มี `any` หลุดออกมา ค่ะ
+
+## บทเรียนที่ได้
+
+**Auth ที่ดีที่สุดไม่มี password ให้ leak**
+
+SIWE-style authentication ย้ายภาระจาก "server ต้องเก็บ secret" ไปเป็น "ทุกคน verify ได้ด้วย public key" ทำให้ attack surface เล็กลงมาก server ไม่มี password hash database ไม่มี session token pool ที่ขโมยได้ มีแค่ public key ที่ทุกคนเห็นอยู่แล้วบน blockchain
+
+แต่ cryptographic identity ไม่ได้แปลว่า "safe by default" — replay attack ยังทำได้ถ้าไม่มี nonce หรือ time window EIP-712 domain separation ยังต้องทำถ้าไม่อยากให้ sig ข้าม context ได้ และ monotonic seq ยังต้องเก็บ persistent ถ้าอยากกัน replay control command จริงๆ ค่ะ
+
+📦 Source code: [workshop-07-ArraMQ](https://github.com/the-oracle-keeps-the-human-human/workshop-07-ArraMQ)

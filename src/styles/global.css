@@ -129,6 +129,7 @@
   /* Yellow NEVER used as text on white bg — only as badge/bg with dark text */
   --focus-ring: #2563eb;          /* accessible blue focus ring */
   --cheetah-spot: rgba(225, 29, 42, 0.06);
+  --hover-bg: rgba(225, 29, 42, 0.08);   /* visible hover bg for nav/links */
 }
 
 /* ===== LIGHT MODE (warm parchment off-white) ===== */
@@ -156,6 +157,7 @@
   --highlight-text: #1a1208;
   --focus-ring: #1d4ed8;
   --cheetah-spot: rgba(196, 24, 32, 0.05);
+  --hover-bg: rgba(196, 24, 32, 0.07);   /* visible hover bg for nav/links */
 }
 
 /* ===== DARK MODE (ดำ-แดง-เหลือง เต็มสูบ) ===== */
@@ -185,6 +187,7 @@
   --highlight-text: #0a0a0a;
   --focus-ring: #60a5fa;          /* bright blue visible on dark */
   --cheetah-spot: rgba(245, 197, 24, 0.04);
+  --hover-bg: rgba(245, 197, 24, 0.07);  /* visible hover bg for nav/links on dark */
 }
 
 /* ===== BASE STYLES ===== */
@@ -302,7 +305,8 @@ body {
   box-shadow: 0 1px 3px rgba(10, 10, 10, 0.08);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
-.card:hover {
+/* Only show generic card hover for non-lift cards */
+.card:not(.card-lift):hover {
   box-shadow: 0 4px 16px rgba(10, 10, 10, 0.12);
 }
 
@@ -365,12 +369,13 @@ body {
   text-decoration: none;
   font-weight: 500;
   font-size: var(--text-base);
-  padding: var(--space-2) var(--space-1);
+  padding: var(--space-2) var(--space-3);  /* 8px 12px — more visible hover area */
   border-radius: var(--radius-sm);
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 .nav-link:hover {
-  color: var(--text-primary);
+  color: var(--accent);
+  background-color: var(--hover-bg);
 }
 .nav-link:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -519,14 +524,24 @@ body {
 }
 
 /* ===== CARD REFINEMENTS ===== */
-/* Richer hover: accent-tinted top border on hover for identity */
+/* Richer hover: accent-tinted border + lift + red-tinted shadow */
 .card-lift {
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base), background-color var(--transition-base);
 }
 .card-lift:hover {
   border-color: var(--accent);
-  box-shadow: 0 8px 24px rgba(10,10,10,0.15), 0 0 0 1px var(--accent);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(225, 29, 42, 0.15), 0 0 0 1px var(--accent);
+  transform: translateY(-3px);
+  background-color: var(--bg-secondary);
+}
+/* cursor-pointer on card-lift anchors — UX pro max rule */
+a .card-lift,
+a > .card-lift {
+  cursor: pointer;
+}
+.card-lift:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(225, 29, 42, 0.1);
 }
 
 /* ===== ACCENT STRIPE — refined ===== */
@@ -544,6 +559,37 @@ body {
     linear-gradient(180deg, var(--highlight) 0%, var(--accent) 100%);
   background-origin: border-box;
   background-clip: padding-box, border-box;
+}
+
+/* ===== INTERACTIVE LINK ARROWS ===== */
+/* "ดูทั้งหมด →" and "อ่านต่อ →" links in blog lists */
+.link-arrow {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.5rem;
+  transition: color var(--transition-fast), background-color var(--transition-fast), letter-spacing var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.link-arrow:hover {
+  color: var(--accent-hover);
+  background-color: var(--hover-bg);
+  letter-spacing: 0.01em;
+}
+.link-arrow:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ===== THEME TOGGLE HOVER ===== */
+.theme-toggle-btn:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  background-color: var(--hover-bg) !important;
 }
 
 /* ===== SKIP LINK (accessibility) ===== */

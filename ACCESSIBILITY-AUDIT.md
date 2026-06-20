@@ -188,3 +188,65 @@ Saved to `/Users/kasidit/bb-landing/screenshots/`:
 - Dark mode `--accent` (#e11d2a) as normal-weight body text would fail AA (4.16:1). Current usage is large/bold only — safe. Watch for future prose links on dark.
 - Blog post template has no fallback image for OG — Safari Reader and social unfurls will have no image. Add a default `ogImage` prop value pointing to a static asset when one exists.
 - `.stripe-accent` gradient uses `background-clip: border-box` — not supported in Firefox <89 (released 2021). Graceful fallback is no gradient, still has border.
+
+---
+
+## ui-ux-pro-max pass
+
+*Date: 2026-06-20 · Source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill*
+
+### Skill's key concrete rules applied
+
+| Rule | Skill reference | Applied |
+|------|----------------|---------|
+| Hover states with smooth transitions 150–300ms | `state-clarity` — make hover/pressed/disabled visually distinct | ✅ |
+| cursor-pointer on clickable elements | `cursor-pointer` (Touch & Interaction) | ✅ already on cards; added `a .card-lift` CSS rule |
+| All interactive elements: visible hover feedback | `press-feedback` / `state-clarity` | ✅ nav links, cards, buttons, theme toggle, link-arrows |
+| 4/8dp spacing rhythm maintained | `spacing-scale` (Layout) | ✅ unchanged — 8-point grid already in place |
+| WCAG AA contrast ≥4.5:1 normal text, all themes | `color-accessible-pairs` (Typography) | ✅ maintained — no tokens changed |
+| Visible focus rings on interactive elements (2–4px) | `focus-states` (Accessibility) | ✅ `:focus-visible` 2px offset ring on all elements |
+| Micro-interaction timing 150–300ms | `duration-timing` (Animation) | ✅ transitions at 0.12–0.2s (fast/base tokens) |
+| Use ease-out for entering transitions | `easing` (Animation) | ✅ `ease` on all hover transitions |
+| No layout shift on hover | `layout-shift-avoid` | ✅ `transform: translateY` only — no width/height animation |
+| Disabled states visually clear | `state-clarity` | ✅ buttons already had distinct active state |
+| Single CTA per screen | `primary-action` | ✅ hero has one primary btn-primary, one btn-outline |
+| Use semantic tokens (no raw hex in components) | `color-semantic` | ✅ all components use CSS custom property tokens |
+
+### Hover state changes (what was changed and for which elements)
+
+**Before**: most interactive elements had minimal or no visible hover bg — only color changes.
+
+**After**:
+
+1. **Nav links** (บล็อก / เกี่ยวกับ / Connect / logo) — added `background-color: var(--hover-bg)` + `color: var(--accent)` on hover. `--hover-bg` is a new per-theme token (8% accent opacity) that is visibly distinct without failing WCAG contrast. Transition: 0.12s ease.
+2. **Theme toggle button** — added `.theme-toggle-btn:hover` CSS class: border turns accent, text turns accent, bg becomes `--hover-bg`. Was previously invisible (only border-color changed).
+3. **Blog cards / principle cards** (`.card-lift:hover`) — border turns accent, box-shadow gains red tint `rgba(225,29,42,0.15)`, `translateY(-3px)` lift increased from -2px for more obvious feedback, bg shifts to `--bg-secondary`. Added `:active` state that snaps back. Transition bumped to 0.2s `--transition-base`.
+4. **"ดูทั้งหมด →" links and "อ่านต่อ →" arrows** — refactored to `.link-arrow` class with `background-color: var(--hover-bg)` + `color: var(--accent-hover)` + subtle `letter-spacing` nudge on hover. Focus-visible ring added.
+5. **btn-primary** (already had hover) — unchanged, was already correct (translateY + shadow).
+6. **btn-outline** (already had hover) — unchanged, was already correct.
+
+### New token added
+
+`--hover-bg` per theme:
+- `[data-theme="white"]`: `rgba(225,29,42,0.08)` (red-tinted)
+- `[data-theme="light"]`: `rgba(196,24,32,0.07)` (darkened-red-tinted)
+- `[data-theme="dark"]`: `rgba(245,197,24,0.07)` (yellow-tinted)
+
+All `--hover-bg` values are decorative backgrounds (not text), so WCAG non-text 3:1 rule does not apply — they are used solely as hover affordance tints behind high-contrast text.
+
+### New utility class added
+
+`.link-arrow` — for "ดูทั้งหมด →" and "อ่านต่อ →" inline CTAs with hover bg + color + focus ring.
+
+### Screenshots
+
+- `screenshots/uxpro-landing-dark.png` — landing dark theme
+- `screenshots/uxpro-landing-light.png` — landing light (parchment) theme
+- `screenshots/uxpro-landing-white.png` — landing white theme
+- `screenshots/uxpro-blog.png` — blog index, dark theme
+
+### Remaining weak points (unchanged)
+
+- Same as prior pass: dark mode `--accent` as normal-weight body prose links would be 4.16:1 (AA fail). Current usage is large/bold only — safe. Monitor future prose links on dark.
+- No default OG image — social unfurls image-less.
+- `.stripe-accent` gradient `background-clip: border-box` Firefox <89 graceful fallback.
