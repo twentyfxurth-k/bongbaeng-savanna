@@ -563,3 +563,43 @@ body {
 .skip-link:focus {
   top: 0;
 }
+
+/* ===== UI/UX Pro Max pass: content-first source link ===== */
+.source-note {
+  padding: 0.85rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-ui);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+.external-source {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-ui);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.85rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+.external-source:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+a:has(.card-lift):focus-visible .card-lift,
+.card-lift:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--focus-ring), 0 8px 24px rgba(10,10,10,0.15);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
