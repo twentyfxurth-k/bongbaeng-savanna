@@ -193,6 +193,17 @@ const canonicalURL = new URL(
         &nbsp;·&nbsp;
         <span lang="en">Deploy via Oracle-Landing (CF Workers)</span>
       </p>
+      <!-- Build info: git sha + branch + build datetime (Task 3) — no opacity reduction, keep WCAG AA -->
+      <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.375rem; font-family: var(--font-mono);">
+        <span lang="en">build {import.meta.env.PUBLIC_BUILD_SHA} · {import.meta.env.PUBLIC_BUILD_BRANCH} · {
+          (() => {
+            const d = new Date(import.meta.env.PUBLIC_BUILD_TIME);
+            const bkk = new Date(d.getTime() + 7 * 60 * 60 * 1000);
+            const pad = (n: number) => String(n).padStart(2, '0');
+            return `${bkk.getUTCFullYear()}-${pad(bkk.getUTCMonth()+1)}-${pad(bkk.getUTCDate())} ${pad(bkk.getUTCHours())}:${pad(bkk.getUTCMinutes())} GMT+7`;
+          })()
+        }</span>
+      </p>
 
       <!-- Oracle Family -->
       <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border);">
