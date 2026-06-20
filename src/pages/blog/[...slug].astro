@@ -97,28 +97,9 @@ const pageDescription = post.data.description ?? post.data.title;
         </p>
 
         {post.data.repo && (
-          <div style="
-            margin-top: 1.25rem;
-            padding: 0.75rem 1rem;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: var(--text-sm);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-          ">
-            <span style="color: var(--text-muted);">📦 Repository:</span>
-            <a
-              href={`https://github.com/${post.data.repo}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="repo-link"
-              style="text-decoration: none; font-weight: 500;"
-            >
-              {post.data.repo}
-            </a>
+          <div class="source-note" style="margin-top: 1.25rem;">
+            <strong>อ่านในเว็บก่อน:</strong> บทความนี้สรุปบริบทและบทเรียนหลักไว้ครบในหน้านี้
+            ส่วน source code เป็นหลักฐานเสริมท้ายบทความสำหรับคนที่อยากตรวจโค้ดจริง
           </div>
         )}
       </header>
@@ -132,10 +113,21 @@ const pageDescription = post.data.description ?? post.data.title;
       </div>
 
       <!-- Footer nav -->
-      <footer style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+      <footer style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap;">
         <a href="/blog" class="nav-link" style="color: var(--accent); font-weight: 600;">
           ← กลับรายการบล็อก
         </a>
+        {post.data.repo && (
+          <a
+            href={`https://github.com/${post.data.repo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="external-source"
+            aria-label={`เปิด source code บน GitHub ออกนอกเว็บ: ${post.data.repo}`}
+          >
+            Source code / ออกนอกเว็บ ↗
+          </a>
+        )}
       </footer>
     </article>
   </div>
