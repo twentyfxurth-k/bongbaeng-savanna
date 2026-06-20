@@ -250,3 +250,57 @@ All `--hover-bg` values are decorative backgrounds (not text), so WCAG non-text 
 - Same as prior pass: dark mode `--accent` as normal-weight body prose links would be 4.16:1 (AA fail). Current usage is large/bold only — safe. Monitor future prose links on dark.
 - No default OG image — social unfurls image-less.
 - `.stripe-accent` gradient `background-clip: border-box` Firefox <89 graceful fallback.
+
+---
+
+## impeccable craft pass (2026-06-20)
+
+### Source reference
+
+Design philosophy from **[impeccable.style](https://impeccable.style/)** — the missing design vocabulary for AI-era interfaces. Key principles extracted and applied:
+
+1. **Restraint over decoration** — no gratuitous visual effects. Color appears functional, not festive.
+2. **Typography does the work** — hierarchy through scale, weight, and spacing; not through borders or bars.
+3. **Whitespace is intentional** — generous padding signals craft; cramped decoration signals template.
+4. **Anti-patterns explicitly avoided**: purple gradients, glassmorphism, "boost your productivity" styling, decorative left-border accent stripes on every container.
+5. **Handcrafted feel** — every mark on the page should have a reason. A short top-rule says "this matters" deliberately; a full-height left stripe says "this is a template".
+6. **Content legibility first** — containers serve reading, not visual interest.
+
+---
+
+### Left-border accent stripe removal log
+
+Every instance of `border-left: N solid var(--accent)` (the cliché AI-slop tell) was located and replaced.
+
+| Location | Element | Old treatment | New treatment |
+|----------|---------|---------------|---------------|
+| `src/styles/global.css` L316–319 | `.stripe-accent` / `.stripe-highlight` utility classes | `border-left: 4px solid var(--accent/highlight)` | Short `::before` pseudo-element: `width: 2rem; height: 2px; background-color: var(--accent)` — a deliberate editorial mark, not wallpaper |
+| `src/styles/global.css` L550–562 | `.stripe-accent` / `.stripe-highlight` (refined override) | `border-left: 3px solid transparent` + gradient `background-clip: border-box` trick | Removed entirely — superseded by the `::before` rule above |
+| `src/styles/global.css` L441–447 | `.prose blockquote` | `border-left: 4px solid var(--accent)` | Editorial: subtle `var(--bg-secondary)` tinted background + `border-radius` + `::before` curly-quote mark (`"`) in accent color at 30% opacity. No vertical bar. |
+| `src/pages/books/chain-build-manual.astro` L170 | TOC `<nav>` inline style | `border-left: 3px solid var(--accent)` | Removed. TOC heading "สารบัญ" now styled as a small-caps label (`0.875rem`, `letter-spacing: 0.08em`, `text-transform: uppercase`, `color: var(--text-muted)`) with a `border-bottom: 1px solid var(--border)` separator — quiet, editorial. |
+| `src/pages/books/chain-build-manual.astro` L228 | `.book-content blockquote` | `border-left: 3px solid var(--accent)` + asymmetric `border-radius` | Same editorial treatment as `.prose blockquote` above |
+| `src/pages/books/l2-follower-saga.astro` L171 | TOC `<nav>` | `border-left: 3px solid var(--accent)` | Same as chain-build-manual TOC |
+| `src/pages/books/l2-follower-saga.astro` L229 | `.book-content blockquote` | `border-left: 3px solid var(--accent)` | Same editorial blockquote treatment |
+| `src/pages/books/many-bodies-one-soul.astro` L170 | TOC `<nav>` | `border-left: 3px solid var(--accent)` | Same as chain-build-manual TOC |
+| `src/pages/books/many-bodies-one-soul.astro` L228 | `.book-content blockquote` | `border-left: 3px solid var(--accent)` | Same editorial blockquote treatment |
+
+Additionally removed `stripe-accent` class from:
+- **Identity card** (`index.astro`): `card card-lift stripe-accent` → `card card-lift stripe-accent` kept — the short top-rule `::before` now renders inside the card, anchoring the card with a deliberate 2px red mark before the heading. Crafted, not templated.
+- **Principle cards** (`index.astro`): removed `stripe-accent` class entirely. The yellow `badge-num` label already provides the visual anchor; a redundant red top-rule would fight it.
+- **Books index cards** (`books/index.astro`): removed `stripe-accent`. The cover image + `card-lift` hover is the visual anchor. Adding a stripe to a cover-image card is pure template behavior.
+
+---
+
+### Contrast — no regressions
+
+All replacements use tokens already verified in prior passes:
+- `var(--text-muted)` TOC heading: ≥7:1 on all themes ✅
+- `var(--border)` hairline separator: non-text, ≥3:1 ✅
+- Curly-quote `::before` at `opacity: 0.3` is purely decorative (`pointer-events: none`, no text content for AT) — no contrast obligation.
+
+### Screenshots
+
+- `screenshots/craft-landing.png` — landing page, dark theme, 1440×2400
+- `screenshots/craft-book.png` — chain-build-manual reading page, dark theme, 1440×2400
+- `screenshots/craft-blog.png` — blog index, dark theme, 1440×2400
+- `screenshots/craft-landing-fold.png` — landing above-the-fold, 1440×900 (shows identity card top-rule)

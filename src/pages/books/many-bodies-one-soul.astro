@@ -163,13 +163,12 @@ const schemaOrg = {
     <!-- Table of Contents -->
     <nav id="toc" aria-label="สารบัญ" style="
       margin-bottom: 3rem;
-      padding: 1.25rem 1.5rem;
+      padding: 1.5rem 1.75rem;
       background-color: var(--bg-secondary);
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
     ">
-      <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 1rem;">สารบัญ</h2>
+      <h2 style="font-size: 0.875rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 1rem; padding-bottom: 0.625rem; border-bottom: 1px solid var(--border);">สารบัญ</h2>
       <ol style="margin: 0; padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.375rem;">
         {chapters.map((ch) => (
           <li style="font-size: var(--text-sm); color: var(--text-secondary);">
@@ -225,11 +224,25 @@ const schemaOrg = {
       font-size: var(--text-sm);
     }
     .book-content blockquote {
-      border-left: 3px solid var(--accent);
-      margin: 1.25rem 0;
-      padding: 0.75rem 1.25rem;
+      position: relative;
       background-color: var(--bg-secondary);
-      border-radius: 0 var(--radius) var(--radius) 0;
+      border-radius: var(--radius);
+      margin: 1.5rem 0;
+      padding: 1.25rem 1.5rem 1.25rem 2rem;
+      font-style: italic;
+    }
+    .book-content blockquote::before {
+      content: '\201C';
+      position: absolute;
+      top: 0.5rem;
+      left: 0.625rem;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--accent);
+      font-style: normal;
+      font-weight: 800;
+      opacity: 0.3;
+      pointer-events: none;
     }
     .book-content blockquote p { color: var(--text-secondary); margin: 0; }
     .book-content table {

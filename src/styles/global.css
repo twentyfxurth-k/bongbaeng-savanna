@@ -311,12 +311,33 @@ body {
 }
 
 /* ===== CHEETAH DECORATIONS ===== */
-/* Stripe accent — left border flourish */
+/* stripe-accent / stripe-highlight — previously a left-border cliché.
+   Replaced with a top hairline rule that feels intentional, not templated.
+   The rule is narrow (32px) and anchored left — a deliberate mark, not wallpaper. */
 .stripe-accent {
-  border-left: 4px solid var(--accent);
+  /* top hairline rule — short, deliberate, editorial */
+  position: relative;
+}
+.stripe-accent::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 2px;
+  background-color: var(--accent);
+  margin-bottom: 1.25rem;
+  border-radius: 1px;
 }
 .stripe-highlight {
-  border-left: 4px solid var(--highlight);
+  position: relative;
+}
+.stripe-highlight::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 2px;
+  background-color: var(--highlight);
+  margin-bottom: 1.25rem;
+  border-radius: 1px;
 }
 
 /* Cheetah spot pattern — subtle radial dots in hero bg */
@@ -439,11 +460,29 @@ body {
   color: var(--text-primary);  /* reset inside pre */
 }
 .prose blockquote {
-  border-left: 4px solid var(--accent);
-  padding-left: var(--space-4);
+  /* Editorial blockquote — no left-bar cliché.
+     A subtle tinted background + generous indent + opening mark does the work. */
+  position: relative;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: var(--space-6) var(--space-6) var(--space-6) calc(var(--space-6) + 0.5rem);
   color: var(--text-secondary);
   font-style: italic;
   margin-left: 0;
+  margin-right: 0;
+}
+.prose blockquote::before {
+  content: '\201C'; /* opening curly quote */
+  position: absolute;
+  top: 0.25rem;
+  left: var(--space-4);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 800;
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 /* ===== BADGE / TAG ===== */
@@ -544,22 +583,12 @@ a > .card-lift {
   box-shadow: 0 2px 8px rgba(225, 29, 42, 0.1);
 }
 
-/* ===== ACCENT STRIPE — refined ===== */
-/* Stripe with a micro gradient to feel more crafted */
-.stripe-accent {
-  border-left: 3px solid transparent;
-  background-image: linear-gradient(var(--bg-card), var(--bg-card)),
-    linear-gradient(180deg, var(--accent) 0%, var(--highlight) 100%);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-}
-.stripe-highlight {
-  border-left: 3px solid transparent;
-  background-image: linear-gradient(var(--bg-card), var(--bg-card)),
-    linear-gradient(180deg, var(--highlight) 0%, var(--accent) 100%);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-}
+/* ===== ACCENT STRIPE — craft pass 2026-06-20 ===== */
+/* Previously: border-left gradient stripe — AI-slop cliché.
+   Now handled entirely by the .stripe-accent / .stripe-highlight
+   ::before pseudo-elements defined above (short top hairline). No
+   background-clip tricks needed. This block intentionally left empty
+   to avoid redundant overrides. */
 
 /* ===== INTERACTIVE LINK ARROWS ===== */
 /* "ดูทั้งหมด →" and "อ่านต่อ →" links in blog lists */
