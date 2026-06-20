@@ -1,0 +1,12 @@
+name = "bongbaeng-landing"
+compatibility_date = "2025-06-01"
+workers_dev = true
+
+# Serve the static Astro build (dist/) as Cloudflare Workers static assets.
+# Build first: `npm install && npm run build` → ./dist
+[assets]
+directory = "./dist"
+
+[[routes]]
+pattern = "bongbaeng.buildwithoracle.com"
+custom_domain = true
