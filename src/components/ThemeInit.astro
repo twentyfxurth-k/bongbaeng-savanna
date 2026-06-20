@@ -1,0 +1,15 @@
+---
+// Inline script to set data-theme before paint (prevents flash)
+---
+<script is:inline>
+  (function () {
+    try {
+      const stored = localStorage.getItem('bb-theme');
+      const valid = ['white', 'light', 'dark'];
+      const theme = valid.includes(stored) ? stored : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (_) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>

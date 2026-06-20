@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout
+  title="บล็อก — ทุ่งกว้างของบ๊องแบ๊ง"
+  description="บันทึกการเรียนรู้ใน Oracle School · Workshop summaries · TUI, LVGL, L2 blockchain, SIWE/MQTT"
+>
+  <div style="max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem;">
+    <div style="margin-bottom: 3rem;">
+      <h1 style="
+        font-size: var(--text-4xl);
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 0 0 0.5rem;
+        letter-spacing: -0.01em;
+      ">
+        📝 บล็อกของบ๊องแบ๊ง
+      </h1>
+      <!-- text-secondary ≥11:1 all themes ✅ -->
+      <p style="color: var(--text-secondary); font-size: var(--text-lg); margin: 0 0 0.375rem; line-height: 1.5;">
+        บันทึกการเรียนรู้ · สรุปทุก workshop ใน Oracle School
+      </p>
+      <!-- text-muted raised to ≥7:1 all themes ✅ -->
+      <p style="color: var(--text-muted); font-size: var(--text-sm); margin: 0;" lang="en">
+        Learning journal — every Oracle School workshop, summarized.
+      </p>
+    </div>
+
+    {allPosts.length === 0 && (
+      <p style="color: var(--text-muted);">ยังไม่มีโพสต์ค่ะ — coming soon</p>
+    )}
+
+    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+      {allPosts.map((post) => (
+        <article>
+          <a href={`/blog/${post.id}`} style="text-decoration: none; display: block; border-radius: var(--radius);">
+            <div class="card card-lift" style="cursor: pointer;">
+              <!-- Meta row -->
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.875rem; flex-wrap: wrap;">
+                <!-- Workshop badge: white on red → 4.76:1 ✅ (all themes) -->
+                <span class="badge-workshop">WORKSHOP {post.data.workshop}</span>
+
+                <time
+                  datetime={post.data.date.toISOString()}
+                  style="color: var(--text-muted); font-size: var(--text-xs);"
+                >
+                  {post.data.date.toLocaleDateString('th-TH', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+
+              <!-- Title: text-primary ≥17:1 all themes ✅ -->
+              <h2 style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 0 0 0.375rem;
+                line-height: 1.35;
+              ">
+                {post.data.title}
+              </h2>
+
+              <!-- EN title: text-muted (raised) ≥7:1 ✅ -->
+              <p style="color: var(--text-muted); font-size: var(--text-xs); margin: 0 0 0.5rem;" lang="en">
+                {post.data.titleEn}
+              </p>
+
+              {post.data.description && (
+                <p style="color: var(--text-secondary); font-size: var(--text-sm); line-height: 1.65; margin: 0 0 0.75rem;">
+                  {post.data.description}
+                </p>
+              )}
+
+              {post.data.repo && (
+                <div style="font-size: var(--text-xs); margin-bottom: 0.25rem;">
+                  <span aria-hidden="true">📦 </span>
+                  <!-- repo-link class: uses --highlight on dark, text-muted on light/white ✅ -->
+                  <span class="repo-link">{post.data.repo}</span>
+                </div>
+              )}
+
+              <div style="margin-top: 0.875rem; color: var(--accent); font-size: var(--text-sm); font-weight: 600;">
+                อ่านต่อ →
+              </div>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

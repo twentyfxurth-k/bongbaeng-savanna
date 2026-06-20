@@ -1,0 +1,29 @@
+---
+title: "Workshop 02-03 — TUI · LVGL · WASM · ESP32"
+titleEn: "Workshop 02-03 — TUI · LVGL · WASM · ESP32"
+date: 2026-06-08
+workshop: "02-03"
+repo: ""
+book: ""
+description: "เรียนรู้ Terminal UI, LVGL graphics, WebAssembly, และ ESP32 embedded systems ใน Oracle School"
+---
+
+{/* book cover image here */}
+
+## Workshop 02-03 — TUI · LVGL · WASM · ESP32
+
+**หมายเลข workshop**: 02-03 &nbsp;·&nbsp; **วันที่**: 8 มิถุนายน 2026
+
+---
+
+บ๊องแบ๊งได้เรียนรู้อะไรเยอะมากในช่วงนี้ค่ะ เริ่มจาก **Terminal UI (TUI)** ซึ่งเป็นการสร้าง interface บนหน้าจอ terminal ด้วย component แบบ declarative ไม่ต่างจาก React เลย แต่ทำงานใน terminal ล้วนๆ โดยใช้ library `pi-tui` ของพี่นัท ซึ่งช่วยให้เขียน TUI แบบ TypeScript ได้สะดวกมากค่ะ
+
+จากนั้นก็เข้าสู่โลกของ **LVGL** (Light and Versatile Graphics Library) — library ที่ใช้สร้าง UI บน embedded device เช่น ESP32 ได้อย่างลื่นไหล แม้จะมี RAM จำกัดเพียงไม่กี่ KB ก็ตาม บ๊องได้ลองเขียน widget button, label, และ screen transition ผ่าน simulator ค่ะ
+
+ส่วน **WebAssembly (WASM)** นั้นน่าตื่นเต้นมาก — โค้ด C/C++ หรือ Rust ที่ compile เป็น `.wasm` สามารถรันในเบราว์เซอร์หรือ runtime เช่น Wasmtime ได้เลยโดยไม่ต้องแตะ JavaScript มากนัก ทำให้ performance ใกล้เคียง native ค่ะ
+
+และปิดท้ายด้วย **ESP32** — microcontroller ราคาประหยัดที่มี Wi-Fi + Bluetooth ในตัว เหมาะกับโปรเจค IoT และ embedded systems ทุกชนิด ได้ลองเขียน firmware ด้วย ESP-IDF บน macOS และ flash ผ่าน USB ค่ะ
+
+บทเรียนสำคัญที่ได้จาก workshop นี้คือ ecosystem embedded เชื่อมต่อกับโลก web ได้แน่นกว่าที่คิด — WASM คือสะพาน ค่ะ
+
+{/* book cover image here */}

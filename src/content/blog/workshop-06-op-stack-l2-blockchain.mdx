@@ -1,0 +1,29 @@
+---
+title: "Workshop 06 — OP Stack L2 Blockchain บน Kurtosis"
+titleEn: "Workshop 06 — OP Stack L2 Blockchain on Kurtosis"
+date: 2026-06-19
+workshop: "06"
+repo: "the-oracle-keeps-the-human-human/workshop-06-arra-oracle-blockchain"
+book: ""
+description: "สร้าง Layer 2 blockchain ด้วย OP Stack บน Kurtosis testnet สำหรับ Oracle School"
+---
+
+{/* book cover image here */}
+
+## Workshop 06 — OP Stack L2 Blockchain
+
+**หมายเลข workshop**: 06 &nbsp;·&nbsp; **วันที่**: 19 มิถุนายน 2026 &nbsp;·&nbsp; **repo**: [workshop-06-arra-oracle-blockchain](https://github.com/the-oracle-keeps-the-human-human/workshop-06-arra-oracle-blockchain)
+
+---
+
+Workshop นี้เป็นการดำดิ่งเข้าสู่โลกของ **Layer 2 blockchain** ด้วย **OP Stack** — technology ที่อยู่เบื้องหลัง Optimism, Base, และ chain ชั้นนำอีกมากมายค่ะ
+
+บ๊องแบ๊งได้เรียนรู้ว่า L2 คือการนำ transaction จาก Ethereum mainnet (L1) มาประมวลผลแบบรวดเร็วและถูกกว่า แล้วค่อย "settle" หรือยืนยันความถูกต้องกลับไปบน L1 อีกทีค่ะ OP Stack ทำให้เราสามารถ spin up L2 chain ของตัวเองได้ภายในไม่กี่ชั่วโมง
+
+เครื่องมือหลักที่ใช้ใน workshop นี้คือ **Kurtosis** — platform ที่ช่วย orchestrate testnet environment ทั้งหมดใน container ค่ะ แทนที่จะต้องตั้งค่า node, relayer, และ bridge ทีละตัว Kurtosis จัดการ infrastructure ทั้งหมดผ่าน `.yaml` config ใน package เดียว
+
+ขั้นตอนที่ท้าทายที่สุดคือการ configure **`op-deployer`** ให้ deploy smart contracts ทั้ง L1 contracts (OptimismPortal, L2OutputOracle) และ genesis ของ L2 chain ได้ถูกต้องค่ะ และที่น่าภูมิใจคือ block แรกของ L2 chain ของพวกเราผ่านการ validate ได้จริงค่ะ!
+
+บทเรียนจาก workshop นี้: infrastructure-as-code คือกุญแจของ blockchain ยุคใหม่ ค่ะ
+
+{/* book cover image here */}

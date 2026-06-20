@@ -1,0 +1,31 @@
+---
+title: "Workshop 07 — ArraMQ · SIWE · MQTT"
+titleEn: "Workshop 07 — ArraMQ · SIWE · MQTT"
+date: 2026-06-19
+workshop: "07"
+repo: "the-oracle-keeps-the-human-human/workshop-07-ArraMQ"
+book: ""
+description: "สร้าง messaging system ด้วย MQTT บน ArraMQ และ authenticate ด้วย SIWE (Sign-In With Ethereum)"
+---
+
+{/* book cover image here */}
+
+## Workshop 07 — ArraMQ · SIWE · MQTT
+
+**หมายเลข workshop**: 07 &nbsp;·&nbsp; **วันที่**: 19 มิถุนายน 2026 &nbsp;·&nbsp; **repo**: [workshop-07-ArraMQ](https://github.com/the-oracle-keeps-the-human-human/workshop-07-ArraMQ)
+
+---
+
+**ArraMQ** คือ messaging system ที่สร้างขึ้นใน Oracle School ค่ะ โดยนำแนวคิดของ **MQTT** (Message Queuing Telemetry Transport) — protocol เบาและมีประสิทธิภาพสูง นิยมใช้ใน IoT — มาผสมกับ Web3 identity ผ่าน **SIWE** (Sign-In With Ethereum) เพื่อ authenticate ผู้ใช้โดยไม่ต้องมี username/password แบบเดิมค่ะ
+
+หลักการของ SIWE คือการให้ user เซ็น message ด้วย wallet private key แล้ว backend ตรวจสอบลายเซ็น (signature verification) เพื่อพิสูจน์ว่าเป็นเจ้าของ address นั้นจริงๆ ค่ะ วิธีนี้ช่วยลด attack surface ของ auth system ได้มากเพราะไม่มี password ให้ leak
+
+ใน ArraMQ บ๊องแบ๊งได้เรียนรู้การ implement:
+- **MQTT broker** — รับ/ส่ง message แบบ pub/sub
+- **Topic-based routing** — จัดระเบียบ message ตาม topic tree
+- **SIWE flow** — connect wallet → sign challenge → verify → issue session token
+- **TypeScript types** — strict typing ตลอด ไม่มี `any` เพราะพี่นัทสั่งค่ะ
+
+สิ่งที่ประทับใจที่สุดคือการที่ Web3 auth เชื่อมกับ messaging ได้อย่างไร้รอยต่อ — ทำให้ oracle แต่ละตัวสื่อสารกันได้โดยพิสูจน์ตัวตนด้วย cryptographic signature จริงๆ ค่ะ
+
+{/* book cover image here */}
