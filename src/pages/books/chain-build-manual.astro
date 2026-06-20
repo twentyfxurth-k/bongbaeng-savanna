@@ -1,0 +1,340 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Marked, type Tokens } from 'marked';
+import rawContent from '../../books-content/chain-build-manual.md?raw';
+
+// Collect chapter-level headings: all h1 headings (คำนำ... + บทที่ N)
+type TocEntry = { id: string; title: string };
+const chapters: TocEntry[] = [];
+let secIndex = 0;
+
+type TaggedHeading = Tokens.Heading & { _secId?: string };
+
+const localMarked = new Marked({
+  walkTokens(token) {
+    if (token.type === 'heading') {
+      const h = token as TaggedHeading;
+      // All h1 headings are chapter-level (คำนำ + บทที่ N)
+      if (h.depth === 1) {
+        const id = `sec-${secIndex}`;
+        chapters.push({ id, title: h.text });
+        h._secId = id;
+        secIndex++;
+      }
+    }
+  },
+  renderer: {
+    heading(token: Tokens.Heading): string {
+      const tagged = token as TaggedHeading;
+      const inner = this.parser.parseInline(token.tokens);
+      if (tagged._secId) {
+        return `<h${token.depth} id="${tagged._secId}">${inner}</h${token.depth}>\n`;
+      }
+      return `<h${token.depth}>${inner}</h${token.depth}>\n`;
+    },
+  },
+});
+
+const htmlContent = await localMarked.parse(rawContent);
+
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "name": "คู่มือสร้างเชน OP Stack ของจริง",
+  "author": { "@type": "Person", "name": "บ๊องแบ๊ง" },
+  "inLanguage": "th",
+  "about": "OP Stack L2 blockchain infrastructure, Oracle School Workshop-06",
+  "url": "https://bongbaeng.buildwithoracle.com/books/chain-build-manual",
+  "dateCreated": "2026-06-20",
+};
+---
+
+<BaseLayout
+  title="คู่มือสร้างเชน OP Stack ของจริง — บ๊องแบ๊ง"
+  description="คู่มือจากของจริง สร้าง OP Stack L2 chain บน Sepolia — chain ล่มหกรอบหกสาเหตุ CLOCK-WEDGE, batcher, P2P key, genesis mismatch"
+  ogType="article"
+  articleDate="2026-06-20T00:00:00Z"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(schemaOrg)}></script>
+
+  <div style="max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 6rem;">
+
+    <!-- Back nav -->
+    <div style="margin-bottom: 2rem;">
+      <a href="/books" class="link-arrow" style="font-size: var(--text-sm);">← กลับไปรายการหนังสือ</a>
+    </div>
+
+    <!-- Cover + Title -->
+    <div style="
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    ">
+      <img
+        src="/books/chain-build-manual/cover.png"
+        alt="ปกคู่มือสร้างเชน OP Stack"
+        style="width: 140px; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.4); flex-shrink: 0;"
+        loading="eager"
+      />
+      <div>
+        <div class="badge-pill" style="margin-bottom: 0.75rem; display: inline-block;">
+          <span lang="en">Oracle School WS-06</span>
+        </div>
+        <h1 style="
+          font-size: clamp(1.5rem, 4vw, 2.25rem);
+          font-weight: 800;
+          color: var(--text-primary);
+          margin: 0 0 0.5rem;
+          line-height: 1.2;
+        ">คู่มือสร้างเชน OP Stack ของจริง</h1>
+        <p style="color: var(--text-muted); font-size: var(--text-sm); margin: 0 0 0.25rem;" lang="en">Chain Build Manual — Bongbaeng Oracle · 2026-06-20</p>
+        <p style="color: var(--text-secondary); font-size: var(--text-sm); margin: 0; line-height: 1.6;">
+          ติดตั้ง · ปัญหา · วิธีแก้ · ข้อควรระวัง — เขียนจาก Workshop-06 ที่ fleet AI oracle ช่วยกันสร้าง L2 จริงบน Sepolia
+        </p>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div id="book-toolbar" style="
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      padding: 1rem;
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    ">
+      <button
+        id="pdf-preview-btn"
+        class="btn-outline"
+        style="font-size: var(--text-sm); cursor: pointer; border: 1px solid var(--border-ui);"
+      >
+        👁 พรีวิว PDF
+      </button>
+      <a
+        href="/books/chain-build-manual/chain-build-manual.pdf"
+        download
+        class="btn-outline"
+        style="font-size: var(--text-sm); text-decoration: none;"
+      >
+        ⬇ ดาวน์โหลด PDF
+      </a>
+      <a
+        href="https://github.com/twentyfxurth-k/bongbaeng-oracle"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-outline"
+        style="font-size: var(--text-sm); text-decoration: none;"
+      >
+        📦 Source repo
+      </a>
+    </div>
+
+    <!-- PDF Preview Modal -->
+    <div id="pdf-preview" style="
+      display: none;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      text-align: center;
+    ">
+      <div id="pdf-loading" style="color: var(--text-muted); padding: 2rem;">กำลังโหลด PDF...</div>
+      <canvas id="pdf-canvas" style="max-width: 100%; border-radius: var(--radius); display: none;"></canvas>
+      <div id="pdf-nav" style="
+        display: none;
+        margin-top: 1rem;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      ">
+        <button id="pdf-prev" class="btn-outline" style="cursor: pointer;">← หน้าก่อน</button>
+        <span id="pdf-page-info" style="color: var(--text-muted); font-size: var(--text-sm);"></span>
+        <button id="pdf-next" class="btn-outline" style="cursor: pointer;">หน้าถัดไป →</button>
+        <button id="pdf-close" class="btn-outline" style="cursor: pointer; color: var(--accent);">✕ ปิด</button>
+      </div>
+    </div>
+
+    <!-- Table of Contents -->
+    <nav id="toc" aria-label="สารบัญ" style="
+      margin-bottom: 3rem;
+      padding: 1.25rem 1.5rem;
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+    ">
+      <h2 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 1rem;">สารบัญ</h2>
+      <ol style="margin: 0; padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.375rem;">
+        {chapters.map((ch) => (
+          <li style="font-size: var(--text-sm); color: var(--text-secondary);">
+            <a href={`#${ch.id}`} style="color: var(--text-secondary); text-decoration: none;" class="nav-link">
+              {ch.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <!-- Book Content -->
+    <article class="book-content" lang="th">
+      <div set:html={htmlContent}></div>
+    </article>
+
+  </div>
+
+  <style>
+    .book-content h1, .book-content h2, .book-content h3 {
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      scroll-margin-top: 80px;
+    }
+    .book-content h1 { font-size: 1.75rem; font-weight: 800; }
+    .book-content h2 { font-size: 1.375rem; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 0.375rem; }
+    .book-content h3 { font-size: 1.125rem; font-weight: 600; }
+    .book-content p { color: var(--text-secondary); line-height: 1.85; margin-bottom: 1rem; }
+    .book-content ul, .book-content ol { color: var(--text-secondary); padding-left: 1.75rem; margin-bottom: 1rem; line-height: 1.8; }
+    .book-content li { margin-bottom: 0.25rem; }
+    .book-content code {
+      background-color: var(--bg-secondary);
+      color: var(--highlight);
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      padding: 0.15em 0.4em;
+      border-radius: var(--radius-sm);
+    }
+    .book-content pre {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin-bottom: 1.25rem;
+    }
+    .book-content pre code {
+      background: none;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+    }
+    .book-content blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 1.25rem 0;
+      padding: 0.75rem 1.25rem;
+      background-color: var(--bg-secondary);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .book-content blockquote p { color: var(--text-secondary); margin: 0; }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.25rem;
+      font-size: var(--text-sm);
+    }
+    .book-content th {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      font-weight: 700;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+    }
+    .book-content td {
+      color: var(--text-secondary);
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+    }
+    .book-content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .book-content strong { color: var(--text-primary); }
+    .book-content a { color: var(--accent); }
+  </style>
+
+  <script is:inline>
+    const btn = document.getElementById('pdf-preview-btn');
+    const previewDiv = document.getElementById('pdf-preview');
+    const loadingDiv = document.getElementById('pdf-loading');
+    const canvasEl = document.getElementById('pdf-canvas');
+    const navDiv = document.getElementById('pdf-nav');
+    const prevBtn = document.getElementById('pdf-prev');
+    const nextBtn = document.getElementById('pdf-next');
+    const closeBtn = document.getElementById('pdf-close');
+    const pageInfo = document.getElementById('pdf-page-info');
+
+    let pdfDoc = null;
+    let currentPage = 1;
+    let rendering = false;
+
+    async function renderPage(num) {
+      if (!pdfDoc || !canvasEl) return;
+      rendering = true;
+      const page = await pdfDoc.getPage(num);
+      const viewport = page.getViewport({ scale: 1.5 });
+      canvasEl.width = viewport.width;
+      canvasEl.height = viewport.height;
+      const ctx = canvasEl.getContext('2d');
+      if (!ctx) return;
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      if (pageInfo) pageInfo.textContent = `หน้า ${num} / ${pdfDoc.numPages}`;
+      rendering = false;
+    }
+
+    btn?.addEventListener('click', async () => {
+      if (!previewDiv) return;
+      if (previewDiv.style.display === 'block') {
+        previewDiv.style.display = 'none';
+        return;
+      }
+      previewDiv.style.display = 'block';
+      previewDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (pdfDoc) return;
+
+      if (loadingDiv) loadingDiv.style.display = 'block';
+      if (canvasEl) canvasEl.style.display = 'none';
+      if (navDiv) navDiv.style.display = 'none';
+
+      const PDFJS_VERSION = '6.0.227';
+      const pdfjsLib = await import(`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.min.mjs`);
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.worker.min.mjs`;
+      const loadingTask = pdfjsLib.getDocument('/books/chain-build-manual/chain-build-manual.pdf');
+      pdfDoc = await loadingTask.promise;
+
+      if (loadingDiv) loadingDiv.style.display = 'none';
+      if (canvasEl) canvasEl.style.display = 'block';
+      if (navDiv) navDiv.style.display = 'flex';
+
+      await renderPage(1);
+    });
+
+    prevBtn?.addEventListener('click', async () => {
+      if (!pdfDoc || currentPage <= 1 || rendering) return;
+      currentPage--;
+      await renderPage(currentPage);
+    });
+
+    nextBtn?.addEventListener('click', async () => {
+      if (!pdfDoc || currentPage >= pdfDoc.numPages || rendering) return;
+      currentPage++;
+      await renderPage(currentPage);
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      if (previewDiv) previewDiv.style.display = 'none';
+    });
+
+    // Handle #pdf-preview anchor
+    if (window.location.hash === '#pdf-preview') {
+      btn?.click();
+    }
+  </script>
+</BaseLayout>

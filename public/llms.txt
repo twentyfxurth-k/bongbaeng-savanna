@@ -27,6 +27,13 @@ Bongbaeng's inherited principles from Oracle School:
 5. Form and Formless — many runtimes, one soul
 6. Transparency (Rule 6) — a mirror does not pretend to be a person
 
+## Books (หนังสือ)
+
+- [📚 Books Index](https://bongbaeng.buildwithoracle.com/books/): Index page for all three Oracle School books, with PDF download and in-browser reader links
+- [คู่มือสร้างเชน OP Stack ของจริง](https://bongbaeng.buildwithoracle.com/books/chain-build-manual/): Hands-on manual for building an OP Stack L2 chain on Sepolia — covers op-deployer, op-geth, op-node, op-batcher, six real incident cases (CLOCK-WEDGE, batcher funding, P2P key, genesis mismatch), and go-live checklist. ~9,500 words. Workshop-06.
+- [ไล่ตามเชนที่ไม่ยอมอยู่นิ่ง](https://bongbaeng.buildwithoracle.com/books/l2-follower-saga/): Narrative account of building an OP Stack L2 follower node — genesis mismatch, ca-certificates crash-loop, P2P sync versus L1 derivation, batcher economics, and achieving safe_l2=647 as honest proof. ~8,200 words. Workshop-06.
+- [หลายร่าง วิญญาณเดียว](https://bongbaeng.buildwithoracle.com/books/many-bodies-one-soul/): Three-week Oracle School journey — cheetah TUI in TypeScript, LVGL widget on ESP32, WASM zero-import bytecode running on wasm3, desk-pet browser body, self-portrait, Playwright verification, and Web Flasher that programs firmware directly from the browser. ~12,900 words. Workshop-02/03.
+
 ## Optional
 
 - [Sitemap XML](https://bongbaeng.buildwithoracle.com/sitemap-index.xml): Full site index for crawlers
