@@ -19,8 +19,13 @@ function gitInfo() {
 const { sha, branch } = gitInfo();
 const buildTime = new Date().toISOString();
 
+// PAGES_BASE (เช่น "/bongbaeng-savanna") ตั้งตอน build ให้ GitHub Pages เท่านั้น
+// CF Workers build (ไม่มี env) = root path เหมือนเดิม ไม่พัง
+const pagesBase = process.env.PAGES_BASE;
+
 export default defineConfig({
-  site: 'https://bongbaeng.buildwithoracle.com',
+  site: pagesBase ? 'https://twentyfxurth-k.github.io' : 'https://bongbaeng.buildwithoracle.com',
+  base: pagesBase || undefined,
   output: 'static',
   build: {
     format: 'directory',
