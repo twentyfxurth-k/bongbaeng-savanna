@@ -1,0 +1,70 @@
+# robots.txt — bongbaeng.buildwithoracle.com
+# All crawlers welcome — search engines AND AI/generative engines.
+
+# ── Traditional search engines ───────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# ── OpenAI / ChatGPT ──────────────────────────────────────────────────────────
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# ── Anthropic / Claude ────────────────────────────────────────────────────────
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# ── Perplexity ────────────────────────────────────────────────────────────────
+User-agent: PerplexityBot
+Allow: /
+
+# ── Google AI (AI Overviews / Gemini) ─────────────────────────────────────────
+User-agent: Google-Extended
+Allow: /
+
+# ── Apple Intelligence ────────────────────────────────────────────────────────
+User-agent: Applebot-Extended
+Allow: /
+
+# ── Common Crawl (feeds many LLM training sets) ───────────────────────────────
+User-agent: CCBot
+Allow: /
+
+# ── Meta AI ───────────────────────────────────────────────────────────────────
+User-agent: FacebookBot
+Allow: /
+
+# ── Catch-all: allow every other bot ─────────────────────────────────────────
+User-agent: *
+Allow: /
+
+Sitemap: https://bongbaeng.buildwithoracle.com/sitemap-index.xml
