@@ -23,6 +23,50 @@ const buildTime = new Date().toISOString();
 // CF Workers build (ไม่มี env) = root path เหมือนเดิม ไม่พัง
 const pagesBase = process.env.PAGES_BASE;
 
+function prefixRootRelativeUrls(html, base) {
+  const cleanBase = base.replace(/\/$/, '');
+  if (!cleanBase) return html;
+  const attrs = ['href', 'src', 'poster', 'content'];
+  for (const attr of attrs) {
+    html = html.replace(
+      new RegExp(`${attr}=(["'])/(?!${cleanBase.slice(1)}(?:/|$)|/|https?:|#)`, 'g'),
+      `${attr}=$1${cleanBase}/`
+    );
+  }
+  html = html.replace(
+    new RegExp(`(['"\(])/(?!${cleanBase.slice(1)}(?:/|$)|/|https?:|#)(blog|books|about|connect)(?=[/'"#?\)])`, 'g'),
+    `$1${cleanBase}/$2`
+  );
+  return html;
+}
+
+function githubPagesBasePathFix(base) {
+  return {
+    name: 'github-pages-base-path-fix',
+    hooks: {
+      'astro:build:done': async ({ dir }) => {
+        if (!base) return;
+        const { readdir, readFile, writeFile } = await import('node:fs/promises');
+        const { join } = await import('node:path');
+        async function walk(current) {
+          for (const entry of await readdir(current, { withFileTypes: true })) {
+            const full = join(current, entry.name);
+            if (entry.isDirectory()) {
+              await walk(full);
+            } else if (entry.isFile() && /\.(html|js|json|xml|txt)$/.test(entry.name)) {
+              const before = await readFile(full, 'utf8');
+              const after = prefixRootRelativeUrls(before, base);
+              if (after !== before) await writeFile(full, after);
+            }
+          }
+        }
+        await walk(dir.pathname);
+      },
+    },
+  };
+}
+
+
 export default defineConfig({
   site: pagesBase ? 'https://twentyfxurth-k.github.io' : 'https://bongbaeng.buildwithoracle.com',
   base: pagesBase || undefined,
@@ -35,6 +79,7 @@ export default defineConfig({
     react(),
     mdx(),
     sitemap(),
+    githubPagesBasePathFix(pagesBase),
   ],
   vite: {
     plugins: [tailwindcss()],
