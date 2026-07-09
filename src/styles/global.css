@@ -449,6 +449,12 @@ body {
   border-radius: var(--radius);
   padding: var(--space-4);
   overflow-x: auto;
+  /* code block ต้องมีช่องว่างสวยๆ ไม่ติดกัน (พี่นัทสั่งทุกคน 2026-07-09) · literal กัน var ที่ไม่มีนิยาม */
+  margin: 1.5rem 0;
+}
+/* code block สองอันติดกัน (pre + pre) → เว้นให้เห็นขอบมนบน-ล่างชัด ไม่กลืนเป็นกล่องเดียว */
+.prose pre + pre {
+  margin-top: 2.25rem;
 }
 .prose pre code {
   background-color: transparent;
@@ -483,6 +489,35 @@ body {
   font-weight: 800;
   opacity: 0.35;
   pointer-events: none;
+}
+/* ตาราง — ต้องมี border ชัด อ่านง่าย (พี่นัทสั่ง 2026-07-09) · wide table เลื่อนแนวนอนบนมือถือ */
+.prose table {
+  border-collapse: collapse;
+  margin: var(--space-6) 0;
+  font-size: 0.9em;
+  line-height: 1.6;
+  display: block;
+  overflow-x: auto;          /* กว้างเกิน → เลื่อนในกล่องตัวเอง หน้าไม่เลื่อน */
+  max-width: 100%;
+}
+.prose thead th {
+  background-color: var(--bg-secondary);
+  color: var(--accent);
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.8rem;
+  vertical-align: top;
+}
+.prose tbody tr:nth-child(even) {
+  background-color: var(--bg-secondary);
+}
+[data-theme="dark"] .prose tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 /* ===== BADGE / TAG ===== */
