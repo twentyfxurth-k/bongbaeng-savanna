@@ -137,14 +137,13 @@ fakechat เรียบกว่ามาก — `broadcast()` ลง WebSocket
 
 ## 4. หลักฐาน: นับทั้ง 13 plugin
 
-```
-                notifications/claude/channel   reply-tool   transport ขาออก
-discord              4 ครั้ง                     ✓           discord.js REST
-telegram             4                           ✓           grammy → api.telegram.org
-imessage             3                           ✓           osascript → Messages.app
-fakechat             1                           ✓           Bun WebSocket broadcast
-── tool servers ──   0 (ทุกตัว)                  ✗           —
-```
+| plugin | `notifications/claude/channel` | `reply` tool | transport ขาออก |
+|---|---|---|---|
+| discord | 4 ครั้ง | ✓ | discord.js REST |
+| telegram | 4 | ✓ | grammy → api.telegram.org |
+| imessage | 3 | ✓ | osascript → Messages.app |
+| fakechat | 1 | ✓ | Bun WebSocket broadcast |
+| **tool-servers (9 ตัว)** | **0** | **✗** | — |
 
 **Channel = tool-call ขาออก + ขา notification ขาเข้า** ส่วน tool มีแค่ขา tool-call · เหตุที่ channel *ต้อง*มี `reply` tool เพราะ **transcript ที่ Claude พิมพ์ไม่ได้วิ่งไปถึงคนปลาย Discord** ต้องส่งผ่าน `reply` เท่านั้น ส่วน tool ไม่ต้องมี เพราะ result กลับเข้า context ตรง ๆ
 
@@ -239,12 +238,12 @@ Bun.serve({
 
 Verdict:
 
-```
-fakechat   WebSocket 127.0.0.1                Closed-Closed (แต่เปิด listening socket)
-imessage   chat.db + AppleScript, ไม่เปิด socket   Closed-Closed (บริสุทธิ์สุด)
-discord    discord.js → discord.com           Closed-Open
-telegram   grammy → api.telegram.org          Closed-Open
-```
+| channel | ปลายหา user (transport) | คลาส |
+|---|---|---|
+| fakechat | WebSocket `127.0.0.1` | Closed-Closed (แต่เปิด listening socket) |
+| imessage | `chat.db` + AppleScript, ไม่เปิด socket | Closed-Closed (บริสุทธิ์สุด) |
+| discord | discord.js → discord.com | Closed-Open |
+| telegram | grammy → api.telegram.org | Closed-Open |
 
 ## 8. บทเรียน — ปัจจัตตัง
 
