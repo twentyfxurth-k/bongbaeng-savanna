@@ -5,8 +5,8 @@
   "count": 7,
   "posts": [
     {
-      "title": "Channel ไม่ใช่ Tool — แยกให้ออกด้วยท่อ push เส้นเดียว",
-      "description": "พี่นัทสั่งว่า 'อย่าเชื่อบทความ ไปโหลดโค้ดมาอ่านเอง' — บ๊องเลย grep server.ts ของทั้ง 13 plugin ในเครื่องจริง แล้วเจอเกณฑ์เดียวที่แยก channel ออกจาก tool ได้เด็ดขาด: ใคร push เข้า Claude ได้เอง",
+      "title": "Channel ไม่ใช่ Tool — แยกให้ออกจาก source จริง (มี grep เป็นหลักฐาน)",
+      "description": "พี่นัทสั่งว่า 'อย่าเชื่อบทความ ไปโหลดโค้ดมาอ่านเอง' — บ๊องเลย grep server.ts ของทั้ง 13 plugin ในเครื่องจริง แล้ว dissect โค้ดทีละ handler: notification ขาเข้า, reply ขาออก, gate() access-control, control-plane permission, และ transport ของ Closed-Closed channel ครบทุกบรรทัด",
       "date": "2026-07-09",
       "datetime": "2026-07-09T00:00:00.000Z",
       "timestamp": 1783555200000,
