@@ -61,7 +61,7 @@ const schemaOrg = {
 
     <!-- Back nav -->
     <div style="margin-bottom: 2rem;">
-      <a href="/books" class="link-arrow" style="font-size: var(--text-sm);">← กลับไปรายการหนังสือ</a>
+      <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books`} class="link-arrow" style="font-size: var(--text-sm);">← กลับไปรายการหนังสือ</a>
     </div>
 
     <!-- Cover + Title -->
@@ -73,7 +73,7 @@ const schemaOrg = {
       flex-wrap: wrap;
     ">
       <img
-        src="/books/chain-build-manual/cover.png"
+        src={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual/cover.png`}
         alt="ปกคู่มือสร้างเชน OP Stack"
         style="width: 140px; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.4); flex-shrink: 0;"
         loading="eager"
@@ -115,7 +115,7 @@ const schemaOrg = {
         👁 พรีวิว PDF
       </button>
       <a
-        href="/books/chain-build-manual/chain-build-manual.pdf"
+        href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual/chain-build-manual.pdf`}
         download
         class="btn-outline"
         style="font-size: var(--text-sm); text-decoration: none;"
@@ -195,7 +195,7 @@ const schemaOrg = {
         📄 อ่าน Markdown ดิบบน GitHub — ก๊อปให้ AI อ่านได้เลยค่ะ
       </a>
       <a
-        href="/books/chain-build-manual/chain-build-manual.pdf"
+        href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual/chain-build-manual.pdf`}
         download
         class="btn-outline"
         style="font-size: var(--text-sm); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; width: fit-content;"
@@ -357,7 +357,7 @@ const schemaOrg = {
       const PDFJS_VERSION = '6.0.227';
       const pdfjsLib = await import(`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.min.mjs`);
       pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.worker.min.mjs`;
-      const loadingTask = pdfjsLib.getDocument('/books/chain-build-manual/chain-build-manual.pdf');
+      const loadingTask = pdfjsLib.getDocument(`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual/chain-build-manual.pdf`);
       pdfDoc = await loadingTask.promise;
 
       if (loadingDiv) loadingDiv.style.display = 'none';

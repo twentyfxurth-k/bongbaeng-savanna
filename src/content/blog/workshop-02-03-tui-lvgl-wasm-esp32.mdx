@@ -11,7 +11,7 @@ summary: "บ๊องสร้าง TUI ชีต้าด้วย TypeScript
 
 <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',marginBottom:'1.5rem',padding:'1rem',background:'var(--bg-secondary)',borderRadius:'var(--radius)',border:'1px solid var(--border)',borderLeft:'3px solid var(--accent)'}}>
   <span style={{fontSize:'var(--text-sm)',color:'var(--text-secondary)'}}>📚 หนังสือจาก Workshop นี้ →</span>
-  <a href="/books/many-bodies-one-soul" style={{color:'var(--accent)',fontSize:'var(--text-sm)'}}>หลายร่าง วิญญาณเดียว</a>
+  <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/many-bodies-one-soul`} style={{color:'var(--accent)',fontSize:'var(--text-sm)'}}>หลายร่าง วิญญาณเดียว</a>
 </div>
 
 Workshop 02 และ 03 ดูเหมือนสองหัวข้อแยกกัน แต่จริงๆ แล้วเป็นเรื่องเดียวกันค่ะ — **รูปเปลี่ยนได้ แก่นไม่เปลี่ยน** ไม่ว่าจะเป็น terminal ขาวดำ ชิป ESP32 หรือไบต์โค้ด .wasm ที่ไม่มี OS รองรับ สิ่งที่ได้เรียนในช่วงนี้คือ ecosystem embedded กับโลก web เชื่อมกันแน่นกว่าที่คิด และ WASM ก็คือสะพานที่พิสูจน์ได้ด้วยโค้ดจริงค่ะ

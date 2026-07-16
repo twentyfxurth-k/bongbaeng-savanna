@@ -11,8 +11,8 @@ const books = [
     wordCount: 9500,
     workshop: 'WS-06',
     hasCover: true,
-    pdf: '/books/chain-build-manual/chain-build-manual.pdf',
-    cover: '/books/chain-build-manual/cover.png',
+    pdf: `${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual/chain-build-manual.pdf`,
+    cover: `${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual/cover.png`,
   },
   {
     slug: 'l2-follower-saga',
@@ -23,8 +23,8 @@ const books = [
     wordCount: 8200,
     workshop: 'WS-06',
     hasCover: true,
-    pdf: '/books/l2-follower-saga/l2-follower-saga.pdf',
-    cover: '/books/l2-follower-saga/cover.png',
+    pdf: `${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/l2-follower-saga/l2-follower-saga.pdf`,
+    cover: `${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/l2-follower-saga/cover.png`,
   },
   {
     slug: 'many-bodies-one-soul',
@@ -35,8 +35,8 @@ const books = [
     wordCount: 12900,
     workshop: 'WS-02/03',
     hasCover: true,
-    pdf: '/books/many-bodies-one-soul/many-bodies-one-soul.pdf',
-    cover: '/books/many-bodies-one-soul/cover.png',
+    pdf: `${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/many-bodies-one-soul/many-bodies-one-soul.pdf`,
+    cover: `${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/many-bodies-one-soul/cover.png`,
   },
 ];
 ---
@@ -166,7 +166,7 @@ const books = [
             <!-- Action buttons -->
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
               <a
-                href={`/books/${book.slug}`}
+                href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/${book.slug}`}
                 class="btn-primary"
                 style="text-align: center; text-decoration: none; display: block; padding: 0.6rem 1rem; font-size: var(--text-sm);"
               >
@@ -174,7 +174,7 @@ const books = [
               </a>
               <div style="display: flex; gap: 0.5rem;">
                 <a
-                  href={`/books/${book.slug}#pdf-preview`}
+                  href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/${book.slug}#pdf-preview`}
                   class="btn-outline"
                   style="flex: 1; text-align: center; text-decoration: none; display: block; padding: 0.5rem 0.75rem; font-size: var(--text-xs);"
                 >

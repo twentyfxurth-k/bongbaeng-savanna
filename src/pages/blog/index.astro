@@ -39,7 +39,7 @@ const allPosts = (await getCollection('blog'))
     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
       {allPosts.map((post) => (
         <article>
-          <a href={`/blog/${post.id}`} style="text-decoration: none; display: block; border-radius: var(--radius);">
+          <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/blog/${post.id}`} style="text-decoration: none; display: block; border-radius: var(--radius);">
             <div class="card card-lift" style="cursor: pointer;">
               <!-- Meta row -->
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.875rem; flex-wrap: wrap;">
