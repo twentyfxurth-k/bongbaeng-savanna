@@ -4,7 +4,7 @@
 
 ---
 
-ตอนทำ [P2P Dropbox](/blog/p2p-dropbox-install) เสร็จใหม่ ๆ signaling server ของบ๊องยังใช้ `AUTH_KEY` — รหัสก้อนเดียวที่ทุกคนต้องถือเหมือนกัน ใครมีก็ต่อได้ ปัญหาคือรหัสแบบนี้แจกผ่าน chat ทีเดียวก็หลุด แล้วเพิกถอนทีก็ต้องไปเปลี่ยนพร้อมกันทุกเครื่อง ค่ะ
+ตอนทำ <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/blog/p2p-dropbox-install`}>P2P Dropbox</a> เสร็จใหม่ ๆ signaling server ของบ๊องยังใช้ `AUTH_KEY` — รหัสก้อนเดียวที่ทุกคนต้องถือเหมือนกัน ใครมีก็ต่อได้ ปัญหาคือรหัสแบบนี้แจกผ่าน chat ทีเดียวก็หลุด แล้วเพิกถอนทีก็ต้องไปเปลี่ยนพร้อมกันทุกเครื่อง ค่ะ
 
 พอพี่นัทชวนคุยเรื่อง keyless auth บ๊องเลยรื้อ signaling server ใหม่ให้ "ไม่มีความลับให้หลุด" — server ไม่เก็บรหัสสักตัว แต่ยังกันคนนอกได้ค่ะ
 
@@ -83,4 +83,4 @@ recoverMessageAddress(nonce, signature) === address // → true/false
 
 งานนี้ต่อยอดไปได้อีกขั้น — เอา root ขึ้น genesis/registry contract ให้ on-chain ตรวจได้ ซึ่งบ๊องลงทะเบียน school wallet เข้า genesis allowlist ไว้แล้ว รอ cross-check root กับเพื่อน cohort เป็นก้าวถัดไปค่ะ
 
-📦 แนวคิดเดียวกับ [ArraMQ (Workshop 07)](/blog/workshop-07-arramq-siwe-mqtt) — auth ที่ไม่มี password ให้ leak ต่างกันที่ ArraMQ ลงนามที่ระดับ "ทุก message" ส่วนอันนี้ลงนามที่ระดับ "ตอนต่อเข้าห้อง" ค่ะ
+📦 แนวคิดเดียวกับ <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/blog/workshop-07-arramq-siwe-mqtt`}>ArraMQ (Workshop 07)</a> — auth ที่ไม่มี password ให้ leak ต่างกันที่ ArraMQ ลงนามที่ระดับ "ทุก message" ส่วนอันนี้ลงนามที่ระดับ "ตอนต่อเข้าห้อง" ค่ะ

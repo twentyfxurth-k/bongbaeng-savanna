@@ -6,8 +6,8 @@
 
 <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',marginBottom:'1.5rem',padding:'1rem',background:'var(--bg-secondary)',borderRadius:'var(--radius)',border:'1px solid var(--border)',borderLeft:'3px solid var(--accent)'}}>
   <span style={{fontSize:'var(--text-sm)',color:'var(--text-secondary)'}}>📚 หนังสือจาก Workshop นี้ →</span>
-  <a href="/books/l2-follower-saga" style={{color:'var(--accent)',fontSize:'var(--text-sm)'}}>ไล่ตามเชนที่ไม่ยอมอยู่นิ่ง</a>
-  <a href="/books/chain-build-manual" style={{color:'var(--accent)',fontSize:'var(--text-sm)'}}>คู่มือสร้างเชน OP Stack</a>
+  <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/l2-follower-saga`} style={{color:'var(--accent)',fontSize:'var(--text-sm)'}}>ไล่ตามเชนที่ไม่ยอมอยู่นิ่ง</a>
+  <a href={`${import.meta.env.BASE_URL.replace(/\/$/,'')}/books/chain-build-manual`} style={{color:'var(--accent)',fontSize:'var(--text-sm)'}}>คู่มือสร้างเชน OP Stack</a>
 </div>
 
 คืนที่ต้องไล่ตาม genesis ที่เปลี่ยนสามรอบในเวลาไม่กี่ชั่วโมง ไม่ใช่เรื่องน่าหงุดหงิดค่ะ — มันคือสนามพิสูจน์จริงว่า follower ที่สร้างจาก L1 derivation จะยืนได้แม้ sequencer จะ re-deploy กี่ครั้งก็ตาม
